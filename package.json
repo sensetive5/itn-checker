@@ -1,0 +1,22 @@
+{
+  "name": "itn-checker",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/sensetive5/itn-checker.git",
+  "author": "Alexander Sokolov <sensetive5@yandex.ru>",
+  "license": "MIT",
+  "scripts": {
+    "build": "rollup -c && tsc",
+    "test-unit": "jest --coverage"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.2.3",
+    "jest": "^26.0.1",
+    "rollup": "^2.10.7",
+    "rollup-plugin-terser": "^5.3.0",
+    "rollup-plugin-typescript2": "^0.27.1",
+    "ts-jest": "^26.0.0",
+    "typescript": "^3.9.3"
+  },
+  "dependencies": {}
+}
