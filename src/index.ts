@@ -35,7 +35,9 @@ function isCorrectLength (innNumber = ''): boolean {
  * @param innNumber
  */
 function isCorrectNumber (innNumber = ''): boolean {
-  return /[^0-9]/.test(innNumber);
+  return innNumber
+    .split('')
+    .every(number => isNaN(parseInt(number)) === false);
 }
 
 /**
