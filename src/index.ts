@@ -1,6 +1,7 @@
 /**
  * Функция проверяет корректность ИНН номера
- * @param {string} innNumber
+ * @param {String|Number} innNumber
+ * @return {Boolean}
  */
 export function checkItn (innNumber: string | number): boolean {
   const itnNumber = typeof innNumber === 'number'
@@ -23,7 +24,8 @@ export function checkItn (innNumber: string | number): boolean {
 
 /**
  * Проверяет длинну ИНН номера
- * @param {string} innNumber
+ * @param {String} innNumber
+ * @return {Boolean}
  */
 function isCorrectLength (innNumber = ''): boolean {
   const CORRECT_LENGTHS = [10, 12];
@@ -32,7 +34,8 @@ function isCorrectLength (innNumber = ''): boolean {
 
 /**
  * Проверяет условие, чтобы в номере не было букв
- * @param innNumber
+ * @param {String} innNumber
+ * @return {Boolean}
  */
 function isCorrectNumber (innNumber = ''): boolean {
   return innNumber
@@ -42,23 +45,24 @@ function isCorrectNumber (innNumber = ''): boolean {
 
 /**
  * Возвращает длинну ИНН номера
- * @param {string} innNumber
+ * @param {String} innNumber
+ * @return {Number}
  */
-function getLength (innNumber = '') {
+function getLength (innNumber = ''): number {
   return innNumber.length;
 }
 
 /**
  * Проверяет ИНН на валидность
- * @param {string} innNumber
- * @param {number[]} multiplicators
- * @param {boolean} isTwelve
+ * @param {String} innNumber
+ * @param {Number[]} multiplicators
+ * @param {Boolean} isTwelve
  */
 function checkNumber (
   innNumber = '',
   multiplicators: number[] = [],
   isTwelve = false
-) {
+): boolean {
   const DIVIDER = 11;
 
   const lastNumber = getLastNumber(innNumber, isTwelve);
@@ -69,9 +73,10 @@ function checkNumber (
 
 /**
  * Проверяет десятизначный ИНН номер на корректность
- * @param {string} innNumber
+ * @param {String} innNumber
+ * @return {Boolean}
  */
-function checkTenInnNumber (innNumber = '') {
+function checkTenInnNumber (innNumber = ''): boolean {
   const TEN_INN_NUMBER_MULTIPLICATORS = [2, 4, 10, 3, 5, 9, 4, 6, 8];
 
   return checkNumber(innNumber, TEN_INN_NUMBER_MULTIPLICATORS);
@@ -79,9 +84,10 @@ function checkTenInnNumber (innNumber = '') {
 
 /**
  * Проверяет двенадцатизначный ИНН номер на корректность
- * @param {string} innNumber
+ * @param {String} innNumber
+ * @return {Boolean}
  */
-function checkTwelveInnNumber (innNumber = '') {
+function checkTwelveInnNumber (innNumber = ''): boolean {
   const TWELVE_INN_NUMBER_MULTIPLICATORS_PART_1 = [7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
 
   const firstCheckResult = checkNumber(innNumber, TWELVE_INN_NUMBER_MULTIPLICATORS_PART_1, true)
@@ -90,22 +96,22 @@ function checkTwelveInnNumber (innNumber = '') {
   	return firstCheckResult;
 
   const TWELVE_INN_NUMBER_MULTIPLICATORS_PART_2 = [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
-  const secondCheckResult = checkNumber(innNumber, TWELVE_INN_NUMBER_MULTIPLICATORS_PART_2);
-
-  return secondCheckResult;
+  return checkNumber(innNumber, TWELVE_INN_NUMBER_MULTIPLICATORS_PART_2);
 }
 
 /**
  * Возвращает контрольную сумму ИНН чисел
- * @param {string} innNumber
- * @param {array[number]} multiplicators
+ * @param {String} innNumber
+ * @param {Number[]} multiplicators
+ * @param {Boolean} isTwelve
+ * @return {Number}
  */
 
 function getCheckSum (
   innNumber = '',
   multiplicators: number[] = [],
   isTwelve = false
-) {
+): number {
   const preparedInnNumber = prepareInnNumber(innNumber, isTwelve);
   return preparedInnNumber.reduce((sum, number, idx) => sum + (number * multiplicators[idx]), 0);
 }
@@ -114,8 +120,9 @@ function getCheckSum (
  * Преобразовывает ИНН номер в валидный для проверки,
  * отсекая последний знак или два последних знака (для 12 значных ИНН)
  *
- * @param {string} innNumber
- * @returns {number[]}
+ * @param {String} innNumber
+ * @param {Boolean} isTwelve
+ * @return {Number[]}
  */
 function prepareInnNumber (innNumber = '', isTwelve = false) {
   const howMany = isTwelve
@@ -132,11 +139,14 @@ function prepareInnNumber (innNumber = '', isTwelve = false) {
  * Берет последние или предпоследние число в ИНН
  * в зависимости от длинны номера
  *
- * @param {string} innNumber
- * @param {boolean} isTwelve
- * @returns {number}
+ * @param {String} innNumber
+ * @param {Boolean} isTwelve
+ * @returns {Number}
  */
-function getLastNumber (innNumber = '', isTwelve = false) {
+function getLastNumber (
+  innNumber = '',
+  isTwelve = false
+): number {
   return isTwelve
     ? +innNumber.split('').slice(-2, -1).pop()
     : +innNumber.split('').slice(-1).pop()
@@ -145,20 +155,28 @@ function getLastNumber (innNumber = '', isTwelve = false) {
 /**
  * Подготавливает контрольную сумму
  *
- * @param {number} sum
- * @param {number} divider
+ * @param {Number} sum
+ * @param {Number} divider
+ * @return {Number}
  */
-function prepareCheckSum (sum = 0, divider = 1) {
+function prepareCheckSum (
+  sum = 0,
+  divider = 1
+): number {
   return (Math.trunc(sum / divider)) * divider;
 }
 
 /**
  * Результат сравнения двух контрольных сумм
  *
- * @param {number} originalCheckSum
- * @param {number} preparedCheckSum
+ * @param {Number} originalCheckSum
+ * @param {Number} preparedCheckSum
+ * @return {Number}
  */
-function compareCheckSums (originalCheckSum = 0, preparedCheckSum = 0) {
+function compareCheckSums (
+  originalCheckSum = 0,
+  preparedCheckSum = 0
+): number {
   const difference = originalCheckSum - preparedCheckSum;
   return difference === 10
     ? 0
