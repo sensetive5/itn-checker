@@ -13,6 +13,12 @@ describe('Check ITN Number', () => {
     expect(() => checkItn(ITN_NUMBER)).toThrow();
   })
 
+  it('Should throw error when number have letters', () => {
+    const ITN_NUMBER = '1a3B567891234';
+
+    expect(() => checkItn(ITN_NUMBER)).toThrow();
+  })
+
   it('Should validate 10 dig ITN number when its correct', () => {
     const CORRECT_ITN_NUMBER = '7710140679';
 

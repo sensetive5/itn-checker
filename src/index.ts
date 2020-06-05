@@ -1,22 +1,29 @@
 /**
  * Функция проверяет корректность ИНН номера
- * @param {string} innNumber 
+ * @param {string} innNumber
  */
-export function checkItn (innNumber = ''): boolean {
-  if (!isCorrectLength(innNumber))
+export function checkItn (innNumber: string | number): boolean {
+  const itnNumber = typeof innNumber === 'number'
+    ? innNumber.toString()
+    : innNumber;
+
+  if (!isCorrectNumber(itnNumber))
+    throw new Error ('INN number should contain only digits');
+
+  if (!isCorrectLength(itnNumber))
     throw new Error ('INN length should be 10 or 12');
 
-  switch (getLength(innNumber)) {
+  switch (getLength(itnNumber)) {
     case 10:
-    	return checkTenInnNumber(innNumber);
+    	return checkTenInnNumber(itnNumber);
     case 12:
-      return checkTwelveInnNumber(innNumber);
+      return checkTwelveInnNumber(itnNumber);
   }
 }
 
 /**
  * Проверяет длинну ИНН номера
- * @param {string} innNumber 
+ * @param {string} innNumber
  */
 function isCorrectLength (innNumber = ''): boolean {
   const CORRECT_LENGTHS = [10, 12];
@@ -24,8 +31,16 @@ function isCorrectLength (innNumber = ''): boolean {
 }
 
 /**
+ * Проверяет условие, чтобы в номере не было букв
+ * @param innNumber
+ */
+function isCorrectNumber (innNumber = ''): boolean {
+  return /[^0-9]/.test(innNumber);
+}
+
+/**
  * Возвращает длинну ИНН номера
- * @param {string} innNumber 
+ * @param {string} innNumber
  */
 function getLength (innNumber = '') {
   return innNumber.length;
@@ -33,10 +48,9 @@ function getLength (innNumber = '') {
 
 /**
  * Проверяет ИНН на валидность
- * @param {string} innNumber 
- * @param {number[]} multiplicators 
- * @param {boolean} isTwelve 
- * @param {number} divider 
+ * @param {string} innNumber
+ * @param {number[]} multiplicators
+ * @param {boolean} isTwelve
  */
 function checkNumber (
   innNumber = '',
@@ -53,7 +67,7 @@ function checkNumber (
 
 /**
  * Проверяет десятизначный ИНН номер на корректность
- * @param {string} innNumber 
+ * @param {string} innNumber
  */
 function checkTenInnNumber (innNumber = '') {
   const TEN_INN_NUMBER_MULTIPLICATORS = [2, 4, 10, 3, 5, 9, 4, 6, 8];
@@ -63,26 +77,26 @@ function checkTenInnNumber (innNumber = '') {
 
 /**
  * Проверяет двенадцатизначный ИНН номер на корректность
- * @param {string} innNumber 
+ * @param {string} innNumber
  */
 function checkTwelveInnNumber (innNumber = '') {
   const TWELVE_INN_NUMBER_MULTIPLICATORS_PART_1 = [7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
-  
+
   const firstCheckResult = checkNumber(innNumber, TWELVE_INN_NUMBER_MULTIPLICATORS_PART_1, true)
-  
+
   if (!firstCheckResult)
   	return firstCheckResult;
-   
+
   const TWELVE_INN_NUMBER_MULTIPLICATORS_PART_2 = [3, 7, 2, 4, 10, 3, 5, 9, 4, 6, 8];
   const secondCheckResult = checkNumber(innNumber, TWELVE_INN_NUMBER_MULTIPLICATORS_PART_2);
-  
+
   return secondCheckResult;
 }
 
 /**
  * Возвращает контрольную сумму ИНН чисел
- * @param {string} innNumber 
- * @param {array[number]} multiplicators 
+ * @param {string} innNumber
+ * @param {array[number]} multiplicators
  */
 
 function getCheckSum (
@@ -97,7 +111,7 @@ function getCheckSum (
 /**
  * Преобразовывает ИНН номер в валидный для проверки,
  * отсекая последний знак или два последних знака (для 12 значных ИНН)
- * 
+ *
  * @param {string} innNumber
  * @returns {number[]}
  */
@@ -115,9 +129,9 @@ function prepareInnNumber (innNumber = '', isTwelve = false) {
 /**
  * Берет последние или предпоследние число в ИНН
  * в зависимости от длинны номера
- * 
- * @param {string} innNumber 
- * @param {boolean} isTwelve 
+ *
+ * @param {string} innNumber
+ * @param {boolean} isTwelve
  * @returns {number}
  */
 function getLastNumber (innNumber = '', isTwelve = false) {
@@ -128,9 +142,9 @@ function getLastNumber (innNumber = '', isTwelve = false) {
 
 /**
  * Подготавливает контрольную сумму
- * 
- * @param {number} sum 
- * @param {number} divider 
+ *
+ * @param {number} sum
+ * @param {number} divider
  */
 function prepareCheckSum (sum = 0, divider = 1) {
   return (Math.trunc(sum / divider)) * divider;
@@ -138,9 +152,9 @@ function prepareCheckSum (sum = 0, divider = 1) {
 
 /**
  * Результат сравнения двух контрольных сумм
- * 
- * @param {number} originalCheckSum 
- * @param {number} preparedCheckSum 
+ *
+ * @param {number} originalCheckSum
+ * @param {number} preparedCheckSum
  */
 function compareCheckSums (originalCheckSum = 0, preparedCheckSum = 0) {
   const difference = originalCheckSum - preparedCheckSum;
