@@ -2,6 +2,8 @@
   "name": "itn-checker",
   "version": "1.0.8",
   "main": "./dist/index.js",
+  "module": "./dist/module.js",
+  "browser": "./dist/browser.js",
   "repository": "https://github.com/sensetive5/itn-checker.git",
   "author": "Alexander Sokolov <sensetive5@yandex.ru>",
   "license": "MIT",

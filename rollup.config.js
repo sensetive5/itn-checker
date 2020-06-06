@@ -1,14 +1,27 @@
 import { terser } from 'rollup-plugin-terser'
+import pkg from './package.json'
 import typescript from 'rollup-plugin-typescript2'
 
 export default {
   input: './src/index.ts',
-  output: {
-    name: 'ItnChecker',
-    file: 'dist/index.js',
-    format: 'esm',
-    sourcemap: true
-  },
+  output: [
+    {
+      file: pkg.main,
+      format: 'cjs'
+    },
+    {
+      file: pkg.module,
+      format: 'esm'
+    },
+    {
+      file: pkg.browser,
+      format: 'iife',
+      name: 'ItnChecker'
+    }
+  ],
+  external: [
+    ...Object.keys(pkg.dependencies || {})
+  ],
   plugins: [
     typescript({
       clean: true,
@@ -23,4 +36,4 @@ export default {
     }),
     terser()
   ]
-};
+}
