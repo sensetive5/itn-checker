@@ -1,6 +1,6 @@
 {
   "name": "itn-checker",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "main": "./dist/index.js",
   "repository": "https://github.com/sensetive5/itn-checker.git",
   "author": "Alexander Sokolov <sensetive5@yandex.ru>",
